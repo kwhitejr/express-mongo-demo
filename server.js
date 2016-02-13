@@ -1,7 +1,7 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
-var CONFIG = require('./config');
+var express = require('express'),
+    bodyParser = require('body-parser'),
+    mongoose = require('mongoose'),
+    CONFIG = require('./config');
 
 mongoose.connect('mongodb://localhost/mongoose-demo');
 
@@ -23,6 +23,15 @@ app.get('/', function (req, res) {
   });
   newDrawing.save();
   res.send('You done gotten it!');
+});
+
+app.post('/', function (req, res) {
+  var newDrawing = new Drawing({
+    name: req.body.name,
+    author: req.body.author
+  });
+  newDrawing.save();
+  res.send('Great post!');
 });
 
 app.route('/drawings')
