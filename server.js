@@ -1,6 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var CONFIG = require('./config');
 
 mongoose.connect('mongodb://localhost/mongoose-demo');
 
@@ -44,7 +45,7 @@ app.route('/drawings/:id')
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
-  var server = app.listen(3000, function() {
-    console.log('Listening to port', server.address().port);
+  var server = app.listen(CONFIG.PORT, function() {
+    console.log('Listening to port', CONFIG.PORT);
   });
 });
