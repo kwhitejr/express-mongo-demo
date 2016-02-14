@@ -16,38 +16,46 @@ var app = express();
 
 app.use(bodyParser.urlencoded({extended: false}));
 
-app.get('/', function (req, res) {
-  var newDrawing = new Drawing({
-    name: 'Foo',
-    author: 'Bar'
-  });
-  newDrawing.save();
-  res.send('You done gotten it!');
-});
-
-app.post('/', function (req, res) {
-  var newDrawing = new Drawing({
-    name: req.body.name,
-    author: req.body.author
-  });
-  newDrawing.save();
-  res.send('Great post!');
-});
-
 app.route('/drawings')
   .get(function (req, res) {
-    res.send('get so good');
+
+    Drawing.find(function (err, drawings) {
+      if (err) {
+        console.error(err);
+      }
+      res.json(drawings);
+    });
+
   })
   .post(function (req, res) {
-    res.send('post so good');
+    var newDrawing = new Drawing({
+      name: req.body.name,
+      author: req.body.author
+    });
+    newDrawing.save();
+    res.send('Great post!');
   });
 
 app.route('/drawings/:id')
   .get(function (req, res) {
-    res.send('get that thing');
+    console.log(req.params);
+    Drawing.findOne({ '_id': req.params.id })
+    .then(function (result) {
+      res.json(result);
+    });
   })
   .put(function (req, res) {
-    res.send('fix that thing');
+    Drawing.update(
+      { '_id': req.params.id },
+      { $set: {
+          name: req.body.name,
+          author: req.body.author
+        }
+      }
+    )
+    .then(function (result) {
+      res.json(result);
+    });
   });
 
 
